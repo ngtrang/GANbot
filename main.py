@@ -15,7 +15,8 @@ parser.add_argument('--generate_num', default=10000, type=int, help='num of gene
 parser.add_argument('--sequence_len', default=20, type=int, help='length of sequence. Default: 20')
 parser.add_argument('--update_rate', default=0.8, type=float, help='update rate for rollout policy. Default: 0.8')
 args = parser.parse_args()
-
+# args.lr = 1e-3
+# args.gpus = 0
 
 
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpus
