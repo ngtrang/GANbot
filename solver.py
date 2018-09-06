@@ -142,13 +142,13 @@ class Solver(object):
 				for _ in range(1):
 					loss = self.train_epoch(self.discriminator, dis_data_loader, dis_criterion, dis_optim)
 
-			print 'discriminator updated via gan loss......'
+			print ('discriminator updated via gan loss......')
 
 			rollout.update_params()
 
 			end = time.time()
 
-			print 'time: [{:.3f}s/epoch] in {}'.format(end-start, backend)
+			print ('time: [{:.3f}s/epoch] in {}'.format(end-start, backend))
 
 
 
