@@ -25,37 +25,28 @@ fake_data = 'fake.csv'
 eval_data = 'eval.csv'
 
 
-
 def main():
-	
-	if not os.path.isdir('data'):
-		os.makedirs('data')
-	real_file = os.path.join('data', real_data)
-	fake_file = os.path.join('data', fake_data)
-	eval_file = os.path.join('data', eval_data)
+    if not os.path.isdir('data'):
+        os.makedirs('data')
+    real_file = os.path.join('data', real_data)
+    fake_file = os.path.join('data', fake_data)
+    eval_file = os.path.join('data', eval_data)
 
+    solver = Solver(args.vocab, args.batch, args.pre_gen_epoch, args.pre_dis_epoch,
+                    args.gan_epoch, args.generate_num, args.sequence_len, args.lr,
+                    real_file, fake_file, eval_file, args.update_rate)
 
-	solver = Solver(args.vocab, args.batch, args.pre_gen_epoch, args.pre_dis_epoch, 
-					args.gan_epoch, args.generate_num, args.sequence_len, args.lr, 
-					real_file, fake_file, eval_file, args.update_rate)
+    if args.gpus == '':
+        print('SeqGAN in cpu......')
+    else:
+        print('SeqGAN in gpu: {}'.format(args.gpus))
 
+    backend = 'cpu' if args.gpus == '' else 'gpu'
 
-
-	if args.gpus == '':
-		print ('SeqGAN in cpu......')
-	else:
-		print ('SeqGAN in gpu: {}'.format(args.gpus))
-
-	backend = 'cpu' if args.gpus == '' else 'gpu'
-
-
-	solver.pretrain_gen()
-	solver.pretrain_dis()
-	solver.train_gan(backend)
-
-
-
+    solver.pretrain_gen()
+    solver.pretrain_dis()
+    solver.train_gan(backend)
 
 
 if __name__ == '__main__':
-	main()
+    main()
