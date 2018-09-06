@@ -41,9 +41,9 @@ def main():
 
 
 	if args.gpus == '':
-		print 'SeqGAN in cpu......'
+		print ('SeqGAN in cpu......')
 	else:
-		print 'SeqGAN in gpu: {}'.format(args.gpus)
+		print ('SeqGAN in gpu: {}'.format(args.gpus))
 
 	backend = 'cpu' if args.gpus == '' else 'gpu'
 

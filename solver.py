@@ -77,28 +77,28 @@ class Solver(object):
 		gen_data_loader = DataLoader(gen_data, batch_size=self.batch_size, shuffle=True, num_workers=8)
 		gen_criterion = util.to_cuda(nn.CrossEntropyLoss(size_average=False, reduce=True))
 		gen_optim = torch.optim.Adam(self.generator.parameters(), self.lr)
-		print '\nPretrain generator......'
+		print('\nPretrain generator......')
 		for epoch in range(self.pre_gen_epochs):
 			loss = self.train_epoch(self.generator, gen_data_loader, gen_criterion, gen_optim)
-			print 'epoch: [{0:d}], model loss: [{1:.4f}]'.format(epoch, loss)
+			print('epoch: [{0:d}], model loss: [{1:.4f}]'.format(epoch, loss))
 			util.generate_samples(self.generator, self.batch_size, self.sequence_len, self.generate_sum, self.eval_file)
 			eval_data = GenData(self.eval_file)
 			eval_data_loader = DataLoader(eval_data, batch_size=self.batch_size, shuffle=True, num_workers=8)
 			loss = self.eval_epoch(self.target_lstm, eval_data_loader, gen_criterion)
-			print 'epoch: [{0:d}], true loss: [{1:.4f}]'.format(epoch, loss)
+			print('epoch: [{0:d}], true loss: [{1:.4f}]'.format(epoch, loss))
 
 
 	def pretrain_dis(self):
 
 		dis_criterion = util.to_cuda(nn.BCEWithLogitsLoss(size_average=False))
 		dis_optim = torch.optim.Adam(self.discriminator.parameters(), self.lr)
-		print '\nPretrain discriminator......'
+		print('\nPretrain discriminator......')
 		for epoch in range(self.pre_dis_epochs):
 			util.generate_samples(self.generator, self.batch_size, self.sequence_len, self.generate_sum, self.fake_file)
 			dis_data = DisData(self.real_file, self.fake_file)
 			dis_data_loader = DataLoader(dis_data, batch_size=self.batch_size, shuffle=True, num_workers=8)
 			loss = self.train_epoch(self.discriminator, dis_data_loader, dis_criterion, dis_optim)
-			print 'epoch: [{0:d}], loss: [{1:.4f}]'.format(epoch, loss)
+			print ('epoch: [{0:d}], loss: [{1:.4f}]'.format(epoch, loss))
 
 
 	def train_gan(self, backend):
@@ -124,14 +124,14 @@ class Solver(object):
 				pg_loss.backward()
 				gen_optim.step()
 
-			print 'generator updated via policy gradient......'
+			print('generator updated via policy gradient......')
 
 			if epoch % 10 == 0:
 				util.generate_samples(self.generator, self.batch_size, self.sequence_len, self.generate_sum, self.eval_file)
 				eval_data = GenData(self.eval_file)
 				eval_data_loader = DataLoader(eval_data, batch_size=self.batch_size, shuffle=True, num_workers=8)
 				loss = self.eval_epoch(self.target_lstm, eval_data_loader, gen_criterion)
-				print 'epoch: [{0:d}], true loss: [{1:.4f}]'.format(epoch, loss)
+				print ('epoch: [{0:d}], true loss: [{1:.4f}]'.format(epoch, loss))
 
 
 
